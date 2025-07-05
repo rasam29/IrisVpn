@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -52,12 +51,15 @@ dependencies {
     implementation(project(":v2ray"))
     implementation(libs.androidx.appcompat)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation ("androidx.core:core-splashscreen:1.0.0-beta02")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation (libs.androidx.core.splashscreen)
+    implementation(libs.coil.compose)
+    implementation(libs.insert.koin.koin.android)
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation ("io.insert-koin:koin-androidx-compose:3.5.0")
+//    implementation ("io.insert-koin:koin-androidx-compose:$1.0.0")
+    implementation(libs.androidx.core)
 }

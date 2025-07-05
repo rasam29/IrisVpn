@@ -3,4 +3,6 @@
     <string name="app_name">Iris</string>
     <string name="download">Download</string>
     <string name="upload">Upload</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">Not Connected</string>
 </resources>

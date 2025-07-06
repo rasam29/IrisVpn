@@ -79,7 +79,7 @@ fun AvailableServerItem(isSelected: Boolean) {
                     Text(text = "PREMIUM", style = VerySmallText, color = Color.Yellow)
                     Spacer(modifier = Modifier.padding(start = SpaceXS))
                     Image(
-                        painter = painterResource(R.mipmap.crown),
+                        painter = painterResource(R.drawable.crown),
                         contentDescription = "Power Button",
                         modifier = Modifier.size(IconVerySmallSize)
                     )

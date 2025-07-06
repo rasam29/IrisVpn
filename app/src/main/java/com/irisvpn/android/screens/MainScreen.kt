@@ -1,5 +1,6 @@
 package com.irisvpn.android.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.irisvpn.android.androidSpecific.rememberPlatformState
 import com.irisvpn.android.appConfig.TelegramChannel
 import com.irisvpn.android.appConfig.theme.SpaceS
@@ -26,6 +28,7 @@ import com.irisvpn.android.widgets.TimerView
 
 @Composable
 fun MainScreen() {
+    val context = LocalContext.current
     IrisImageBackground {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -38,7 +41,9 @@ fun MainScreen() {
                 platformState.launchTelegram(TelegramChannel)
             }, settingClick = {
                 irisNavigation.navigate(Screen.Setting())
-            }, {})
+            }, onPremiumClick = {
+                Toast.makeText(context,"Comming soon!",Toast.LENGTH_SHORT).show()
+            })
             Spacer(
                 Modifier.padding(
                     top = SpaceS

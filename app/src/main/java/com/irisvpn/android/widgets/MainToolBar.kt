@@ -37,7 +37,7 @@ import com.irisvpn.android.appConfig.theme.EdgeToEdgeMainToolBarHeight
 fun MainToolBar(
     telegramClick: () -> Unit,
     settingClick: () -> Unit,
-    addCustomSetting: () -> Unit,
+    onPremiumClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -57,12 +57,12 @@ fun MainToolBar(
                 SimpleToolbarIcon(
                     click = telegramClick,
                     contentDescription = "telegram",
-                    icon = R.mipmap.telegram,
+                    icon = R.drawable.telegram,
                 )
                 ToolBarIcon(
                     click  = {
                         settingClick.invoke()
-                    }, contentDescription = "setting", icon = R.mipmap.setting
+                    }, contentDescription = "setting", icon = R.drawable.setting
                 )
             }
             Row(modifier = Modifier.align(Alignment.Center)) {
@@ -81,13 +81,14 @@ fun MainToolBar(
             }
 
             Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                //todo comming soon
+//                ToolBarIcon(
+//                    click = addCustomSetting,
+//                    contentDescription = "customVpnConfig",
+//                    icon = R.mipmap.add
+//                )
                 ToolBarIcon(
-                    click = addCustomSetting,
-                    contentDescription = "customVpnConfig",
-                    icon = R.mipmap.add
-                )
-                ToolBarIcon(
-                    click = addCustomSetting, contentDescription = "crown", icon = R.mipmap.crown
+                    click = onPremiumClick, contentDescription = "crown", icon = R.drawable.crown
                 )
             }
         }

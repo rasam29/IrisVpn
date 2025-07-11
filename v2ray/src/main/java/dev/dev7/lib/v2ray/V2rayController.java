@@ -24,6 +24,7 @@ import android.net.VpnService;
 import android.os.Build;
 import android.widget.Toast;
 
+import androidx.activity.ComponentActivity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,7 +60,7 @@ public class V2rayController {
         }
     };
 
-    public static void init(final AppCompatActivity activity, final int app_icon, final String app_name) {
+    public static void init(final ComponentActivity activity, final int app_icon, final String app_name) {
         Utilities.copyAssets(activity);
         currentConfig.applicationIcon = app_icon;
         currentConfig.applicationName = app_name;

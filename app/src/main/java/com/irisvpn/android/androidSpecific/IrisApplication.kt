@@ -1,7 +1,7 @@
 package com.irisvpn.android.androidSpecific
 
 import android.app.Application
-import com.irisvpn.android.di.startDi
+import com.irisvpn.android.di.modules.startDi
 
 class IrisApplication : Application() {
     override fun onCreate() {

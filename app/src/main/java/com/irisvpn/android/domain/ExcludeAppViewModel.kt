@@ -67,6 +67,6 @@ class ExcludeAppViewModel(
     }
 }
 
-private fun String.parsePackageName(): List<String> = trim().split(",")
+fun String.parsePackageName(): List<String> = trim().split(",")
 
 private fun List<String>.flattenPackageName(): String = joinToString(separator = ",") { it }

@@ -60,6 +60,11 @@ dependencies {
     implementation(libs.insert.koin.koin.android)
     implementation("io.insert-koin:koin-android:3.5.0")
     implementation ("io.insert-koin:koin-androidx-compose:3.5.0")
+    val ktorVersion = "1.5.0"
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
+    implementation("io.ktor:ktor-client-logging:$ktorVersion")
 //    implementation ("io.insert-koin:koin-androidx-compose:$1.0.0")
     implementation(libs.androidx.core)
 }

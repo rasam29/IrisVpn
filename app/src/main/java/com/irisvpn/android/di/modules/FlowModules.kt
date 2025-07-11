@@ -1,6 +1,5 @@
-package com.irisvpn.android.di
+package com.irisvpn.android.di.modules
 
-import android.content.Context
 import com.irisvpn.android.androidSpecific.AndroidInstalledAppRepository
 import com.irisvpn.android.androidSpecific.AndroidSharedPreferences
 import com.irisvpn.android.domain.ExcludeAppViewModel
@@ -10,7 +9,6 @@ import com.irisvpn.android.utils.AppPackagesRepository
 import com.irisvpn.android.utils.Preference
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.context.GlobalContext.startKoin
 import org.koin.dsl.module
 
 val mainModule = module {
@@ -37,12 +35,5 @@ val excludeModule = module {
     }
     viewModel<ExcludeAppViewModel> {
         ExcludeAppViewModel(get(), get())
-    }
-}
-
-fun startDi(androidContext: Context) {
-    startKoin {
-        androidContext(androidContext)
-        modules(mainModule, settingModule, excludeModule)
     }
 }

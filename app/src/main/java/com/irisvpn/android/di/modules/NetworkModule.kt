@@ -1,63 +1,84 @@
 package com.irisvpn.android.di.modules
 
 import android.util.Log
+import com.irisvpn.android.domain.baseUrl.BaseUrlRepository
+import com.irisvpn.android.domain.baseUrl.InMemoryBaseUrlRepository
+import com.irisvpn.android.domain.server.AndroidMessageRepository
+import com.irisvpn.android.domain.server.AndroidNetworkCapability
+import com.irisvpn.android.domain.server.ErrorMessageRepository
+import com.irisvpn.android.domain.server.NetworkCapability
+import com.irisvpn.android.domain.server.ServerRetriever
+import com.irisvpn.android.domain.server.ServerRetrieverImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
-import io.ktor.client.features.DefaultRequest
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.logging.Logger
-import io.ktor.client.features.logging.Logging
-import io.ktor.client.features.observer.ResponseObserver
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
+import io.ktor.client.request.accept
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
-private const val TIME_OUT = 6000
+private const val TIME_OUT = 20000L
 
 val networkModule = module {
-    // Ktor
-//    factory<AlbumKtorApi> { AlbumKtorApiImpl(get()) }
 
+    factory<NetworkCapability> { AndroidNetworkCapability(androidContext()) }
+    factory<BaseUrlRepository> { InMemoryBaseUrlRepository() }
+    factory<ServerRetriever> { ServerRetrieverImpl(get(), get(), get(), get()) }
+    factory<ErrorMessageRepository> { AndroidMessageRepository(androidContext()) }
     single {
         HttpClient(Android) {
-            install(JsonFeature)
-            {
-                KotlinxSerializer(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        useAlternativeNames = true
+                        ignoreUnknownKeys = true
+                        encodeDefaults = false
+                    }
+                )
+            }
 
-                engine {
-                    connectTimeout = TIME_OUT
-                    socketTimeout = TIME_OUT
-                }
+//            install(HttpTimeout) {
+//                requestTimeoutMillis = TIME_OUT
+//                connectTimeoutMillis = TIME_OUT
+//                socketTimeoutMillis = TIME_OUT
+//            }
 
-                //Logging
-                install(Logging) {
-                    logger = object : Logger {
-                        override fun log(message: String) {
-                            Log.d("HttpLogging:", message)
-                        }
-
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.v("Logger Ktor =>", message)
                     }
                 }
+                level = LogLevel.ALL
+            }
 
-                //Http Response
-                install(ResponseObserver) {
-                    onResponse { response ->
-                        Log.d("HTTP status:", "${response.status.value}")
-                    }
+            install(ResponseObserver) {
+                onResponse { response ->
+                    Log.d("HTTP status:", "${response.status.value}")
                 }
+            }
 
-                // Headers
-                install(DefaultRequest) {
-                    header(HttpHeaders.ContentType, ContentType.Application.Json)
-                }
+            install(DefaultRequest) {
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+            }
+
+            defaultRequest {
+                contentType(ContentType.Application.Json)
+                accept(ContentType.Application.Json)
             }
         }
     }

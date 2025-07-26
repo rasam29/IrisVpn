@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
-import com.irisvpn.android.utils.AppPackagesRepository
+import com.irisvpn.android.domain.platform.AppPackagesRepository
 import com.irisvpn.android.widgets.InstalledApp
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.withContext

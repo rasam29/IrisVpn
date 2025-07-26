@@ -1,7 +1,10 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.baselineprofile)
+    id("kotlinx-serialization")
 }
 
 android {
@@ -18,15 +21,31 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
+
+    signingConfigs {
+        create("release"){
+            storeFile = file("../iris.jks")
+            storePassword = "iris@1979"
+            keyAlias = "iris"
+            keyPassword = "iris@1979"
+        }
+    }
+
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -49,22 +68,27 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(project(":v2ray"))
-    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.profileinstaller)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    "baselineProfile"(project(":baselineprofile"))
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.androidx.core.splashscreen)
     implementation(libs.coil.compose)
     implementation(libs.insert.koin.koin.android)
-    implementation("io.insert-koin:koin-android:3.5.0")
-    implementation ("io.insert-koin:koin-androidx-compose:3.5.0")
-    val ktorVersion = "1.5.0"
-    implementation("io.ktor:ktor-client-android:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
-//    implementation ("io.insert-koin:koin-androidx-compose:$1.0.0")
+    implementation(libs.insert.koin.koin.android)
+    implementation (libs.koin.androidx.compose)
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.androidx.core)
+    implementation(libs.core.ktx)
+    implementation ("com.google.android.gms:play-services-ads:23.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }

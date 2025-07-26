@@ -38,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import com.irisvpn.android.appConfig.theme.AppPrimaryColor
 import com.irisvpn.android.appConfig.theme.IconMediumSize
-import com.irisvpn.android.appConfig.theme.IconNormalSize
 import com.irisvpn.android.appConfig.theme.MediumText
 import com.irisvpn.android.appConfig.theme.PrimaryTextColor
 import com.irisvpn.android.appConfig.theme.SecondaryTextColor
@@ -48,8 +47,7 @@ import com.irisvpn.android.appConfig.theme.SpaceS
 import com.irisvpn.android.appConfig.theme.SpaceXS
 import com.irisvpn.android.appConfig.theme.SpaceXXL
 import com.irisvpn.android.appConfig.theme.TitleMedium
-import com.irisvpn.android.appConfig.theme.VerySmallText
-import com.irisvpn.android.domain.ExcludeAppViewModel
+import com.irisvpn.android.screens.excludeApp.ExcludeAppViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,8 +95,8 @@ fun ExcludeApplicationModal(
                             )
                         },
                         shape = RoundedCornerShape(SpaceXXL),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.LightGray,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.LightGray,
                             focusedTextColor = Color.PrimaryTextColor,
                             unfocusedIndicatorColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,

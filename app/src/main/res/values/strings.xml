@@ -5,4 +5,25 @@
     <string name="upload">Upload</string>
     <string name="connected">Connected</string>
     <string name="not_connected">Not Connected</string>
+    <string name="need_notification_permission_for_better_experience">Need notification permission for better experience!</string>
+    <string name="coming_soon">Coming soon!</string>
+    <string name="permission_required">Permission Required!</string>
+    <string name="connecting">Connecting...</string>
+    <string name="check_your_network_connection">Please Check you network Connection</string>
+    <string name="unExpected_error_happens">UnExpected error happens!</string>
+    <string name="server_error">We have some Technical issues, please try again later!</string>
+    <string name="available_server_error_title">Couldn\'t Load available server!</string>
+    <string name="premium">PREMIUM</string>
+    <string name="server_list_selected">Selected</string>
+    <string name="available_server_select_server">Select</string>
+    <string name="failed_to_show_advertisement">Failed to show advertisement, please try again!</string>
+    <string name="must_see_advertisement_to_continue">Must see advertisement to continue!</string>
+    <string name="failed_to_fetch_server_data">Failed to fetch server data, please try again!</string>
+    <string name="please_wait_until_servers_load_successfully">Please wait until servers load successfully!</string>
+    <string name="thank_you_for_your_feedback">Thank you for your feedback!</string>
+    <string name="automatically_connects_to_the_selected_server_at_startup_which_may_be_unsuccessful">Automatically connects to the selected server at startup, which may be unsuccessful.</string>
+    <string name="auto_connect_at_startup">Auto connect at startup</string>
+    <string name="excluded_apps_from_vpn">Excluded Apps from VPN</string>
+    <string name="apps_you_choose_here_will_bypass_vpn_traffic">Apps you choose here will bypass VPN traffic.</string>
+    <string name="servers_must_load_to_enable_this_feature">Servers must load to enable this feature!</string>
 </resources>

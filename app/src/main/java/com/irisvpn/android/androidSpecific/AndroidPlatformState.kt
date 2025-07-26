@@ -3,8 +3,6 @@ package com.irisvpn.android.androidSpecific
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
@@ -14,8 +12,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import com.irisvpn.android.utils.PlatformState
-import com.irisvpn.android.widgets.InstalledApp
+import com.irisvpn.android.domain.platform.PlatformState
 import kotlin.system.exitProcess
 
 
@@ -62,3 +59,4 @@ fun rememberPlatformState(): PlatformState {
     }
     return state
 }
+

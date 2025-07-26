@@ -29,9 +29,10 @@ import com.irisvpn.android.appConfig.theme.PrimaryTextColor
 import com.irisvpn.android.appConfig.theme.SecondaryTextColor
 import com.irisvpn.android.appConfig.theme.SmallText
 import com.irisvpn.android.appConfig.theme.SpaceXS
+import com.irisvpn.android.domain.vpn.Speed
 
 @Composable
-fun ConnectionSpeedView() {
+fun ConnectionSpeedView(speed:Speed) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,19 +44,21 @@ fun ConnectionSpeedView() {
         SpeedItem(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.download),
-            icon = R.drawable.download
+            icon = R.drawable.download,
+            value = speed.download
         )
         VerticalDivider(modifier = Modifier.fillMaxHeight())
         SpeedItem(
             modifier = Modifier.weight(1f),
             title = stringResource(R.string.upload),
-            icon = R.drawable.upload
+            icon = R.drawable.upload,
+            value = speed.upload
         )
     }
 }
 
 @Composable
-private fun SpeedItem(modifier: Modifier, title: String, @DrawableRes icon: Int) {
+private fun SpeedItem(value:String,modifier: Modifier, title: String, @DrawableRes icon: Int) {
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +76,7 @@ private fun SpeedItem(modifier: Modifier, title: String, @DrawableRes icon: Int)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = title, color = Color.SecondaryTextColor, style = SmallText)
-            Text("0 KB/s", color = Color.PrimaryTextColor, style = MediumText)
+            Text(text = value, color = Color.PrimaryTextColor, style = MediumText)
         }
     }
 }

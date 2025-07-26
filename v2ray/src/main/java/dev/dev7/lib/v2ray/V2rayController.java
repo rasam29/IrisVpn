@@ -2,33 +2,26 @@ package dev.dev7.lib.v2ray;
 
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.content.Context.RECEIVER_EXPORTED;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_COMMAND_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_COMMAND_INTENT;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CONFIG_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_CONNECTION_STATE_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CURRENT_CONFIG_DELAY_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CURRENT_CONFIG_DELAY_BROADCAST_INTENT;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_STATICS_BROADCAST_INTENT;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_TYPE_BROADCAST_EXTRA;
 import static dev.dev7.lib.v2ray.utils.V2rayConfigs.connectionState;
 import static dev.dev7.lib.v2ray.utils.V2rayConfigs.currentConfig;
 import static dev.dev7.lib.v2ray.utils.V2rayConfigs.serviceMode;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_CONNECTION_STATE_BROADCAST_EXTRA;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_TYPE_BROADCAST_EXTRA;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_COMMAND_EXTRA;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_COMMAND_INTENT;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CONFIG_EXTRA;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CURRENT_CONFIG_DELAY_BROADCAST_EXTRA;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_CURRENT_CONFIG_DELAY_BROADCAST_INTENT;
+import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_STATICS_BROADCAST_INTENT;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.VpnService;
 import android.os.Build;
-import android.widget.Toast;
 
-import androidx.activity.ComponentActivity;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 
@@ -37,15 +30,15 @@ import java.util.Objects;
 
 import dev.dev7.lib.v2ray.core.V2rayCoreExecutor;
 import dev.dev7.lib.v2ray.interfaces.LatencyDelayListener;
-import dev.dev7.lib.v2ray.services.V2rayVPNService;
 import dev.dev7.lib.v2ray.services.V2rayProxyService;
-import dev.dev7.lib.v2ray.utils.V2rayConfigs;
+import dev.dev7.lib.v2ray.services.V2rayVPNService;
 import dev.dev7.lib.v2ray.utils.Utilities;
+import dev.dev7.lib.v2ray.utils.V2rayConfigs;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 import libv2ray.Libv2ray;
 
 public class V2rayController {
-    private static ActivityResultLauncher<Intent> activityResultLauncher;
+
     static final BroadcastReceiver stateUpdaterBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -56,33 +49,28 @@ public class V2rayController {
                 } else {
                     V2rayConfigs.serviceMode = V2rayConstants.SERVICE_MODES.VPN_MODE;
                 }
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
         }
     };
 
-    public static void init(final ComponentActivity activity, final int app_icon, final String app_name) {
-        Utilities.copyAssets(activity);
+    public static void init(final Context context, final int app_icon, final String app_name) {
+        Utilities.copyAssets(context);
         currentConfig.applicationIcon = app_icon;
         currentConfig.applicationName = app_name;
-        registerReceivers(activity);
-        activityResultLauncher = activity.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                startTunnel(activity);
-            } else {
-                Toast.makeText(activity, "Permission not granted.", Toast.LENGTH_LONG).show();
-            }
-        });
+        registerReceivers(context);
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    public static void registerReceivers(final Activity activity){
+    public static void registerReceivers(final Context context) {
         try {
-            activity.unregisterReceiver(stateUpdaterBroadcastReceiver);
-        }catch (Exception ignore){}
+            context.unregisterReceiver(stateUpdaterBroadcastReceiver);
+        } catch (Exception ignore) {
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            activity.registerReceiver(stateUpdaterBroadcastReceiver, new IntentFilter(V2RAY_SERVICE_STATICS_BROADCAST_INTENT), RECEIVER_EXPORTED);
+            context.registerReceiver(stateUpdaterBroadcastReceiver, new IntentFilter(V2RAY_SERVICE_STATICS_BROADCAST_INTENT), RECEIVER_EXPORTED);
         } else {
-            activity.registerReceiver(stateUpdaterBroadcastReceiver, new IntentFilter(V2RAY_SERVICE_STATICS_BROADCAST_INTENT));
+            context.registerReceiver(stateUpdaterBroadcastReceiver, new IntentFilter(V2RAY_SERVICE_STATICS_BROADCAST_INTENT));
         }
     }
 
@@ -91,36 +79,16 @@ public class V2rayController {
     }
 
     public static boolean isPreparedForConnection(final Context context) {
-        if (Build.VERSION.SDK_INT >= 33) {
-            if (ContextCompat.checkSelfPermission(context, POST_NOTIFICATIONS) != PermissionChecker.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
         Intent vpnServicePrepareIntent = VpnService.prepare(context);
         return vpnServicePrepareIntent == null;
     }
 
-    private static void prepareForConnection(final Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(activity, POST_NOTIFICATIONS) != PermissionChecker.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(activity, new String[]{POST_NOTIFICATIONS}, 101);
-                return;
-            }
-        }
-        Intent vpnServicePrepareIntent = VpnService.prepare(activity);
-        if (vpnServicePrepareIntent != null) {
-            activityResultLauncher.launch(vpnServicePrepareIntent);
-        }
-    }
-
-    public static void startV2ray(final Activity activity, final String remark, final String config, final ArrayList<String> blocked_apps) {
+    public static void startV2ray(final Context context, final String remark, final String config, final ArrayList<String> blocked_apps) {
         if (!Utilities.refillV2rayConfig(remark, config, blocked_apps)) {
             return;
         }
-        if (!isPreparedForConnection(activity)) {
-            prepareForConnection(activity);
-        } else {
-            startTunnel(activity);
+        if (isPreparedForConnection(context)) {
+            startTunnel(context);
         }
     }
 
@@ -159,7 +127,7 @@ public class V2rayController {
         get_delay_intent.putExtra(V2RAY_SERVICE_COMMAND_EXTRA, V2rayConstants.SERVICE_COMMANDS.MEASURE_DELAY);
         context.sendBroadcast(get_delay_intent);
     }
-    
+
     public static long getV2rayServerDelay(final String config) {
         return V2rayCoreExecutor.getConfigDelay(Utilities.normalizeV2rayFullConfig(config));
     }

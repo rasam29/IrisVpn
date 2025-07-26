@@ -27,3 +27,4 @@ dependencyResolutionManagement {
 rootProject.name = "Iris vpn"
 include(":app")
 include(":v2ray")
+include(":baselineprofile")

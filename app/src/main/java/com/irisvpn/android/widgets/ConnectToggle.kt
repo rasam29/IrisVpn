@@ -1,5 +1,6 @@
 package com.irisvpn.android.widgets
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,18 +25,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.irisvpn.android.R
 import com.irisvpn.android.appConfig.theme.AppTintEffectColor
+import com.irisvpn.android.appConfig.theme.ConnectTextColor
 import com.irisvpn.android.appConfig.theme.IconMediumSize
-import com.irisvpn.android.appConfig.theme.IconNormalSize
 import com.irisvpn.android.appConfig.theme.IconSmallSize
 import com.irisvpn.android.appConfig.theme.SpaceXL
 import com.irisvpn.android.appConfig.theme.SpaceXS
+import com.irisvpn.android.domain.core.GeneralState
 
 @Composable
-fun ConnectToggleView(onConnectClick: () -> Unit) {
+fun ConnectToggleView(connectionState: GeneralState, onConnectClick: () -> Unit) {
     Box(
         modifier = Modifier
             .clip(
@@ -48,13 +49,13 @@ fun ConnectToggleView(onConnectClick: () -> Unit) {
             .height(450.dp),
         contentAlignment = Alignment.Center
     ) {
-        ConnectButton(onConnectClick, false)
+        ConnectButton(onConnectClick, state = connectionState)
     }
 }
 
 @Composable
 private fun ConnectButton(
-    onClick: () -> Unit, isConnected: Boolean
+    onClick: () -> Unit, state: GeneralState
 ) {
     Column(
         verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
@@ -62,7 +63,7 @@ private fun ConnectButton(
         Box(contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(190.dp)
-                .background(Color(0xFF1B1E3C), shape = CircleShape) // outer circle
+                .background(Color(0xFF1B1E3C), shape = CircleShape)
                 .shadow(20.dp, shape = CircleShape, ambientColor = Color.AppTintEffectColor)
                 .clickable { onClick() }) {
             Box(
@@ -78,7 +79,7 @@ private fun ConnectButton(
             )
 
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.power), // You can replace this with a custom SVG
+                imageVector = ImageVector.vectorResource(R.drawable.power),
                 contentDescription = "Power Button",
                 tint = Color.White,
                 modifier = Modifier.size(IconMediumSize)
@@ -92,22 +93,55 @@ private fun ConnectButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.unprotected),
+                imageVector = ImageVector.vectorResource(state.findIconByState()),
                 contentDescription = null,
-                tint = Color.Red,
+                tint = state.findColorByState(),
                 modifier = Modifier.size(IconSmallSize)
             )
             Spacer(modifier = Modifier.width(SpaceXS))
             Text(
-                text = if (isConnected) stringResource(R.string.connected) else stringResource(R.string.not_connected),
-                color = if (isConnected) Color.Green else Color.Red
+                text = state.findLabelByState(),
+                color = state.findColorByState()
             )
         }
     }
 }
 
-@Preview
+@DrawableRes
+private fun GeneralState.findIconByState(): Int = when (this) {
+    is GeneralState.Connected -> R.drawable.resource_protected
+    GeneralState.Connecting,
+    GeneralState.DisConnected,
+    GeneralState.DisConnectedOfAdShowFailed,
+    GeneralState.DisConnectedOfDismiss,
+    GeneralState.WaitForServerListToLoad,
+    GeneralState.MustSeeAdToContinue -> R.drawable.unprotected
+    is GeneralState.SessionFetchError -> R.drawable.unprotected
+}
+
 @Composable
-fun PreviewToggle(modifier: Modifier = Modifier) {
-    ConnectToggleView {}
+private fun GeneralState.findLabelByState(): String {
+    val resId = when (this) {
+        is GeneralState.Connected -> R.string.connected
+        GeneralState.Connecting -> R.string.connecting
+        GeneralState.DisConnected,
+        GeneralState.DisConnectedOfAdShowFailed,
+        GeneralState.DisConnectedOfDismiss,
+        GeneralState.WaitForServerListToLoad,
+        GeneralState.MustSeeAdToContinue -> R.string.not_connected
+
+        is GeneralState.SessionFetchError -> R.string.not_connected
+    }
+    return stringResource(resId)
+}
+
+fun GeneralState.findColorByState(): Color = when (this) {
+    is GeneralState.Connected -> Color.Green
+    GeneralState.Connecting -> Color.ConnectTextColor
+    GeneralState.DisConnected,
+    GeneralState.DisConnectedOfAdShowFailed,
+    GeneralState.DisConnectedOfDismiss,
+    GeneralState.WaitForServerListToLoad,
+    GeneralState.MustSeeAdToContinue -> Color.Red
+    is GeneralState.SessionFetchError -> Color.Red
 }

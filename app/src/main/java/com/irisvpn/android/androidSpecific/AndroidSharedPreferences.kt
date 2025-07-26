@@ -1,7 +1,9 @@
 package com.irisvpn.android.androidSpecific
 
 import android.content.Context
-import com.irisvpn.android.utils.Preference
+import com.irisvpn.android.domain.platform.Preference
+import com.irisvpn.android.domain.server.AvailableServer
+import kotlinx.serialization.json.Json
 
 class AndroidSharedPreferences(context: Context) : Preference {
     private val prefs = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
@@ -19,6 +21,16 @@ class AndroidSharedPreferences(context: Context) : Preference {
     }
 
     override fun getExcludedApps(): String {
-        return prefs.getString("EXCLUDED", "")?:""
+        return prefs.getString("EXCLUDED", "") ?: ""
+    }
+
+    override fun saveCurrentSelectedServer(availableServer: AvailableServer) {
+        prefs.edit().putString("current", Json.encodeToString(availableServer)).apply()
+    }
+
+    override fun getCurrentSelectedServer(): AvailableServer? {
+        val str = prefs.getString("EXCLUDED", "")
+        if (str.isNullOrBlank()) return null
+        return Json.decodeFromString<AvailableServer>(str)
     }
 }

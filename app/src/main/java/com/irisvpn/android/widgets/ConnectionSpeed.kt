@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.irisvpn.android.R
 import com.irisvpn.android.appConfig.theme.AppHorizontalMargin
 import com.irisvpn.android.appConfig.theme.ConnectionSpeedHeight
@@ -79,4 +80,14 @@ private fun SpeedItem(value:String,modifier: Modifier, title: String, @DrawableR
             Text(text = value, color = Color.PrimaryTextColor, style = MediumText)
         }
     }
+}
+
+
+@Composable
+@Preview
+fun ConnectionSpeed() {
+    ConnectionSpeedView(Speed(
+        upload = "21 kb/s",
+        download = "23 kb/s"
+    ))
 }

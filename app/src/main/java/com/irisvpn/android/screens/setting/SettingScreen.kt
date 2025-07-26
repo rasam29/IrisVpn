@@ -17,8 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import com.irisvpn.android.R
-import com.irisvpn.android.appConfig.theme.AppPrimaryColor
 import com.irisvpn.android.appConfig.theme.AppTintEffectColor
 import com.irisvpn.android.appConfig.theme.BorderSize
 import com.irisvpn.android.appConfig.theme.EdgeToEdgeSimpleToolBarHeight
@@ -58,9 +55,12 @@ fun SettingScreen(viewModel: SettingViewModel = koinViewModel()) {
         SimpleToolbar("Settings", Icons.Default.KeyboardArrowLeft)
 
         LaunchedEffect(Unit) {
-            viewModel.notFetchedError.collect{
-                Toast.makeText(context,
-                    context.getString(R.string.servers_must_load_to_enable_this_feature), Toast.LENGTH_SHORT).show()
+            viewModel.notFetchedError.collect {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.servers_must_load_to_enable_this_feature),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         if (isShowInstalledAppModal.value) {

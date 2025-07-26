@@ -81,7 +81,6 @@ fun MainToolBar(
             }
 
             Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-                //todo comming soon
 //                ToolBarIcon(
 //                    click = addCustomSetting,
 //                    contentDescription = "customVpnConfig",

@@ -19,7 +19,7 @@ data class ConnectionStats(
     val traffic: Traffic,
     val time: ConnectionTime,
     val mode: IrisConnectionMode,
-){
+) {
     companion object {
         fun DisConnected() = ConnectionStats(
             ping = Ping(0),
@@ -58,9 +58,4 @@ data class Speed(
 data class Traffic(
     val upload: String,
     val download: String
-)
-
-data class IrisServer(
-    val name: String,
-    val serverString: String
 )

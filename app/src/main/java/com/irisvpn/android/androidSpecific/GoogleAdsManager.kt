@@ -2,7 +2,6 @@ package com.irisvpn.android.androidSpecific
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -11,7 +10,6 @@ import com.google.android.gms.ads.RequestConfiguration
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.irisvpn.android.domain.platform.AdManager
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

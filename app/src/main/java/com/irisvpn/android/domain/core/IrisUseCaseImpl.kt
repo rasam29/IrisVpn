@@ -35,7 +35,7 @@ class IrisUseCaseImpl(
 
     private val shouldShowRate: Boolean get() = countRepository.getSuccessfulConnectCount() == SHOW_RATE_ON_N_SUCCESS
 
-    private val _generalState = MutableStateFlow<GeneralState>(GeneralState.DisConnected)
+    private val _generalState = MutableStateFlow<GeneralState>(DisConnected)
 
     override fun currentIrisServer(scope: CoroutineScope): StateFlow<CurrentServerState> =
         serverRepository.getCurrentSelectedServer(scope, false)
@@ -63,19 +63,19 @@ class IrisUseCaseImpl(
                     val currentConfig =
                         serverRepository.getCurrentSelectedServer(coroutineScope, false).value
                     if (currentConfig is CurrentServerState.OnReady) {
-                        _generalState.value = GeneralState.Connecting
+                        _generalState.value = Connecting
                         val newConfig =
                             sessionService.getSessionFromServer(currentConfig.current.id.toString())
                         when (newConfig) {
                             is Either.Left -> {
                                 analyticService.sessionConfigFetchFailed()
                                 _generalState.value =
-                                    GeneralState.SessionFetchError(newConfig.value.message ?: "")
+                                    SessionFetchError(newConfig.value.message ?: "")
                             }
 
                             is Either.Right -> {
                                 vpnService.start(currentConfig.current.name ?: "", newConfig.value)
-                                _generalState.value = GeneralState.MustSeeAdToContinue
+                                _generalState.value = MustSeeAdToContinue
                             }
                         }
 
@@ -92,19 +92,19 @@ class IrisUseCaseImpl(
             AdState.Dismissed -> {
                 vpnService.stop()
                 analyticService.adDismissed()
-                _generalState.value = GeneralState.DisConnectedOfDismiss
+                _generalState.value = DisConnectedOfDismiss
             }
 
             is AdState.FailedToLoad -> {
                 vpnService.stop()
                 analyticService.adShowFailed()
-                _generalState.value = GeneralState.DisConnectedOfAdShowFailed
+                _generalState.value = DisConnectedOfAdShowFailed
             }
 
             AdState.FailedToShow -> {
                 vpnService.stop()
                 analyticService.adShowFailed()
-                _generalState.value = GeneralState.DisConnectedOfAdShowFailed
+                _generalState.value = DisConnectedOfAdShowFailed
             }
 
             AdState.Seen -> {

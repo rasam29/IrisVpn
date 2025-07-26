@@ -12,7 +12,6 @@ import com.irisvpn.android.domain.server.ServerRetrieverImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -28,8 +27,6 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
-
-private const val TIME_OUT = 20000L
 
 val networkModule = module {
 
@@ -50,12 +47,6 @@ val networkModule = module {
                     }
                 )
             }
-
-//            install(HttpTimeout) {
-//                requestTimeoutMillis = TIME_OUT
-//                connectTimeoutMillis = TIME_OUT
-//                socketTimeoutMillis = TIME_OUT
-//            }
 
             install(Logging) {
                 logger = object : Logger {

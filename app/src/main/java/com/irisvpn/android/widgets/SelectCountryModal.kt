@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.irisvpn.android.R
 import com.irisvpn.android.appConfig.theme.AppPrimaryColor
-import com.irisvpn.android.appConfig.theme.ConnectTextColor
 import com.irisvpn.android.appConfig.theme.IconHugeSize
 import com.irisvpn.android.appConfig.theme.IconNormalSize
 import com.irisvpn.android.appConfig.theme.IconVerySmallSize

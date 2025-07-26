@@ -16,7 +16,7 @@ import javax.net.ssl.TrustManagerFactory
 import kotlin.system.exitProcess
 
 
-fun checkSecurity(){
+fun checkSecurity() {
     fun isRunningOnEmulator(): Boolean {
         return (Build.FINGERPRINT.contains("generic")
                 || Build.MODEL.contains("google_sdk")
@@ -65,12 +65,12 @@ fun checkSecurity(){
 
     if (isDeviceRooted()) exitProcess(0)
 
-//    if (usesUserAddedCAs()) exitProcess(0)
+    if (usesUserAddedCAs()) exitProcess(0)
 
-//    if (hasUserAddedCertificates()) exitProcess(0)
+    if (hasUserAddedCertificates()) exitProcess(0)
 }
 
-fun initiateAnalytics(){
+fun initiateAnalytics() {
 
 }
 
@@ -78,7 +78,7 @@ fun initiateAnalytics(){
 fun startDi(androidContext: Context) {
     startKoin {
         androidContext(androidContext)
-        modules(mainModule, settingModule, excludeModule,useCaseModule, networkModule,adModule)
+        modules(mainModule, settingModule, excludeModule, useCaseModule, networkModule, adModule)
     }
 }
 

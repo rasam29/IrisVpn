@@ -12,9 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.irisvpn.android.appConfig.theme.AppTintEffectColor
-import com.irisvpn.android.appConfig.theme.SmallText
 import com.irisvpn.android.appConfig.theme.SpaceM
-import com.irisvpn.android.appConfig.theme.SpaceS
 import com.irisvpn.android.appConfig.theme.SpaceXS
 import com.irisvpn.android.appConfig.theme.VerySmallText
 

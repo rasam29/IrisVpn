@@ -40,10 +40,8 @@ import com.irisvpn.android.widgets.IrisImageBackground
 import com.irisvpn.android.widgets.MainToolBar
 import com.irisvpn.android.widgets.SelectCountryModal
 import com.irisvpn.android.widgets.TimerView
-import dev.dev7.lib.v2ray.V2rayController
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import java.util.ArrayList
 
 @Composable
 fun MainScreen(adsManager: AdManager = koinInject(), viewModel: MainViewModel = koinViewModel()) {
@@ -56,12 +54,6 @@ fun MainScreen(adsManager: AdManager = koinInject(), viewModel: MainViewModel = 
 
     val tunnelDevicePermissionLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { isGranted ->
-            V2rayController.startV2ray(
-                activity,
-                "Test",
-                "vless://405bdbcef0433592acdd371b9337fc0520bd627a480f813c0ba49de96e7ec61b@217.60.38.27:8001?type=tcp&security=none#HongKong-VLESS-api_405bdbcef0433592acdd371b9337fc0520bd627a480f813c0ba49de96e7ec61b",
-                ArrayList()
-            )
             if (isPreparedForConnection(context)) {
                 viewModel.toggleConnection()
             } else {
@@ -89,18 +81,16 @@ fun MainScreen(adsManager: AdManager = koinInject(), viewModel: MainViewModel = 
 
         GeneralState.DisConnectedOfAdShowFailed -> {
             Toast.makeText(
-                context,
-                stringResource(R.string.failed_to_show_advertisement),
-                Toast.LENGTH_SHORT
+                context, stringResource(R.string.failed_to_show_advertisement), Toast.LENGTH_SHORT
             ).show()
         }
 
         GeneralState.DisConnectedOfDismiss -> {
             Toast.makeText(
                 context,
-                stringResource(R.string.must_see_advertisement_to_continue), Toast.LENGTH_SHORT
-            )
-                .show()
+                stringResource(R.string.must_see_advertisement_to_continue),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         GeneralState.MustSeeAdToContinue -> {
@@ -112,9 +102,7 @@ fun MainScreen(adsManager: AdManager = koinInject(), viewModel: MainViewModel = 
 
         is GeneralState.SessionFetchError -> {
             Toast.makeText(
-                context,
-                stringResource(R.string.failed_to_fetch_server_data),
-                Toast.LENGTH_SHORT
+                context, stringResource(R.string.failed_to_fetch_server_data), Toast.LENGTH_SHORT
             ).show()
         }
 
@@ -139,7 +127,6 @@ fun MainScreen(adsManager: AdManager = koinInject(), viewModel: MainViewModel = 
                             Toast.LENGTH_SHORT
                         ).show()
 
-                    } else {
                     }
                 }
             }
